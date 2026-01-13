@@ -30,7 +30,11 @@ public class ProductionDataSourceConfig {
         }
 
         // Parse the URL
-        URI dbUri = new URI(dbUrl);
+        String cleanUrl = dbUrl;
+        if (cleanUrl.startsWith("jdbc:")) {
+            cleanUrl = cleanUrl.substring(5);
+        }
+        URI dbUri = new URI(cleanUrl);
 
         // Extract credentials
         String username = "";
@@ -43,12 +47,12 @@ public class ProductionDataSourceConfig {
         }
 
         // Build the clean JDBC URL
-        // Render/Heroku schems are usually "postgres" or "postgresql"
         // JDBC expects "jdbc:postgresql://host:port/path"
 
         int port = dbUri.getPort() == -1 ? 5432 : dbUri.getPort();
 
-        // Handle "postgres://" schema mapping to "jdbc:postgresql://"
+        // Handle "postgres://" schema mapping (or "postgresql://") to
+        // "jdbc:postgresql://"
         String jdbcUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath();
 
         HikariConfig config = new HikariConfig();
