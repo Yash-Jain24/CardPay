@@ -9,6 +9,9 @@ spring:
   jpa:
     show-sql: false
 
+jwt:
+  secret: ${JWT_SECRET}
+
 management:
   endpoints:
     web:

@@ -1,6 +1,12 @@
 spring:
   application:
     name: cardpay
+  
+  profiles:
+    active: local
+
+jwt:
+  secret: cardpay_secret_key_must_be_at_least_32_bytes_long_so_adding_more_text
 
   jpa:
     hibernate:

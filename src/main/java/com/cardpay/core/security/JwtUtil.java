@@ -18,8 +18,12 @@ public class JwtUtil {
     // Ideally, this should be in application.properties. Using a fixed key for
     // simplicity in MVP.
     // Must be at least 256 bits (32 bytes).
-    private static final String SECRET_STRING = "cardpay_secret_key_must_be_at_least_32_bytes_long_so_adding_more_text";
-    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET_STRING.getBytes());
+    @org.springframework.beans.factory.annotation.Value("${jwt.secret}")
+    private String secretString;
+
+    private Key getSecretKey() {
+        return Keys.hmacShaKeyFor(secretString.getBytes());
+    }
 
     // Token validity: 10 hours
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
@@ -38,7 +42,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -56,7 +60,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
