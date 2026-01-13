@@ -35,7 +35,9 @@ Render is great for Dockerized Spring Boot apps.
 3.  Plan: `Free`.
 4.  Create it.
 5.  Once created, copy the **Internal Connection Details** to fill the Environment Variables above.
-    *   `DATABASE_URL` usually looks like `jdbc:postgresql://dpg-....render.com:5432/cardpay_db` (Modify the `postgres://` prefix to `jdbc:postgresql://` if needed for Java).
+    *   `DATABASE_URL` usually looks like `jdbc:postgresql://dpg-....render.com:5432/cardpay_db`.
+    *   **Important**: Use the **Internal Database URL** for your Backend service configuration. It is faster and not exposed to the public internet.
+    *   *Note*: The URL from Render starts with `postgres://`. You **MUST** change it to `jdbc:postgresql://` for Spring Boot to verify it works.
 
 ---
 
